@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     private int coins;
+    [SerializeField] private int coinsInLevel;
+
     public float speed;
     Rigidbody PlayerRigidbody;
     public Text coinsCollected;
@@ -15,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         PlayerRigidbody = GetComponent<Rigidbody>();
+        GetCoinsAmount();
     }
 
     // Update is called once per frame
@@ -25,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical);
         PlayerRigidbody.AddForce(movement * speed * Time.deltaTime);
 
-        if(coins >= 4)
+        if(coins >= coinsInLevel)
         {
             SceneManager.LoadScene("GameWin");
         }
@@ -44,5 +47,10 @@ public class PlayerMovement : MonoBehaviour
             coinsCollected.GetComponent<Text>().text = "Coins Collected: " + coins;
             Destroy(collision.gameObject);
         }
+    }
+
+    private void GetCoinsAmount()
+    {
+        coinsInLevel = GameObject.Find("Coins").transform.childCount;
     }
 }
